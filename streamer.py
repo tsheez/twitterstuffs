@@ -1,19 +1,36 @@
 import tweepy
-from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from tweepy import Stream
 
 class listener (StreamListener):
+    def __init__(self, api = None, maxTweets = 10):
+        self.numTweets = 0
+        self.maxTweets = maxTweets
+        self.api = api
+        self.tweetList =[]
     def on_status(self, status):
-        print(status.text)
-        print(status.created_at)
+        if not status.text.startswith('RT'):
+            self.tweetList.append(status)
+            self.numTweets+=1
+            print(self.numTweets)
+        if self.numTweets >= self.maxTweets:
+            return False
         return True
     def on_error(self,status):
         print(status)
 
-auth = tweepy.OAuthHandler("cp87wlIepQ8zLOdlmXWe6ns4o", "I0GJIpQl4XPmDuqh1TUqKAoMz8x3wHUaoPkILndfaPdlmNZO9A")
-auth.set_access_token("891695227395645442-BtHtN3c7clyoFNO6EM7s7yMqjI5qQpr", "IX4x9GW9dfA7bkHISkEw6BE7TS7f7GTVlImS6EzCcoKzx")
+def tweetRetriever (api, auth, filter = "test", maxTweets = 2, lang="en"):
+    listen = listener(api, maxTweets=maxTweets)
+    twitterStream = Stream(auth, listen)
+    twitterStream.filter(languages=[lang], track = [filter])
+    return listen.tweetList
 
-twitterStream = Stream(auth, listener())
-twitterStream.filter(languages=["en"],track=["python"])
 
+
+
+
+"""
+twitterStream = Stream(auth, listener(api))
+twitterStream.filter(languages=["en"],track=["Locked and Loaded"])
+print('fart')
+"""
