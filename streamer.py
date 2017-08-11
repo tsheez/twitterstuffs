@@ -15,5 +15,5 @@ auth = tweepy.OAuthHandler("cp87wlIepQ8zLOdlmXWe6ns4o", "I0GJIpQl4XPmDuqh1TUqKAo
 auth.set_access_token("891695227395645442-BtHtN3c7clyoFNO6EM7s7yMqjI5qQpr", "IX4x9GW9dfA7bkHISkEw6BE7TS7f7GTVlImS6EzCcoKzx")
 
 twitterStream = Stream(auth, listener())
-twitterStream.filter(track=["#GoT"])
+twitterStream.filter(languages=["en"],track=["python"])
 
